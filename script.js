@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Interatividade do mapa
     const interactiveMap = document.getElementById('interactive-map');
     
     if (interactiveMap) {
@@ -8,16 +7,16 @@ document.addEventListener('DOMContentLoaded', function() {
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
             
-            // Cria um marcador no local clicado
+            //criação do marcador
             const marker = document.createElement('div');
             marker.className = 'map-marker';
             marker.style.left = (x - 10) + 'px';
             marker.style.top = (y - 10) + 'px';
             
-            // Adiciona o marcador ao mapa
+            //marcador
             this.parentNode.appendChild(marker);
             
-            // Mostra modal para adicionar informações
+            //info do form
             setTimeout(() => {
                 const reportType = prompt('Que tipo de risco você quer reportar?\n1. Assédio\n2. Roubo\n3. Área escura');
                 if (reportType) {
@@ -27,29 +26,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Botão de emergência
+    //botao emerg
     const emergencyBtn = document.getElementById('emergency-btn');
     if (emergencyBtn) {
         emergencyBtn.addEventListener('click', function() {
             if (confirm('Você está em perigo? Podemos alertar seus contatos de confiança.')) {
-                // Simular envio de alerta
                 alert('Mensagem de emergência enviada para seus contatos com sua localização.');
             }
         });
     }
     
-    // Botão para ligar para a polícia
+    //botao polic
     const policeBtn = document.getElementById('police-btn');
     if (policeBtn) {
         policeBtn.addEventListener('click', function() {
             if (confirm('Ligar para a Polícia Militar (190)?')) {
-                // Simular chamada
                 alert('Redirecionando para chamada de emergência...');
             }
         });
     }
     
-    // Botão para abrigos
+    // abrigos
     const shelterBtn = document.getElementById('shelter-btn');
     if (shelterBtn) {
         shelterBtn.addEventListener('click', function() {
@@ -57,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Adiciona estilo dinâmico para os marcadores
     const style = document.createElement('style');
     style.textContent = `
         .map-marker {
@@ -81,24 +77,24 @@ document.addEventListener('DOMContentLoaded', function() {
     document.head.appendChild(style);
 
 
-    // Inicializa o mapa centralizado no Recife
+    // centralizado
     const map = L.map('mapid').setView([-8.0476, -34.8770], 13);
 
-    // Adiciona mapa base (OpenStreetMap)
+    // base (OpenStreetMap)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
-    // Marcador clicável de exemplo (Praça do Diário)
+    //marcador que da pra clicar
     L.marker([-8.0640917, -34.8804661,1691])
         .addTo(map)
         .bindPopup("<b>Praça do Diário</b><br>Área com alto índice de assédio após as 18h")
         .openPopup();
 
-    // Função para marcar locais perigosos
+    //função perigo
     
     map.on('click', function(e) {
-    // Cria o formulário no popup
+    //cria popup pro forms 
         const form = document.createElement('form');
         form.innerHTML = `
             <h3>Reportar Perigo</h3>
@@ -122,13 +118,13 @@ document.addEventListener('DOMContentLoaded', function() {
             .setContent(form)
             .openOn(map);
         
-        // Adiciona o evento de submit
+        //evento submit
         form.addEventListener('submit', function(event) {
             event.preventDefault();
             const tipo = form.querySelector('.danger-type').value;
             const descricao = form.querySelector('.danger-description').value;
             
-            // Cria o marcador como o da Praça do Diário
+            //cria o marcador bem gostoso
             L.marker([e.latlng.lat, e.latlng.lng])
                 .addTo(map)
                 .bindPopup(`
@@ -144,12 +140,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function saveReport(lat, lng, tipo) {
-        // Cria um marcador no mapa
         const marker = L.marker([lat, lng])
             .addTo(map)
             .bindPopup(`<b>${tipo}</b><br>Reportado em ${new Date().toLocaleTimeString()}`);
-        
-        // Adiciona ao array de marcadores temporários (se necessário)
         
         
         console.log(`Marcador criado em ${lat}, ${lng} - Tipo: ${tipo}`);
@@ -160,14 +153,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // CHATBOT 
 document.addEventListener('DOMContentLoaded', function() {
-    // Elementos
+    //el
     const chatbotToggle = document.getElementById('chatbot-toggle');
     const chatbotContainer = document.getElementById('chatbot-container');
     const chatbotClose = document.getElementById('chatbot-close');
     const chatbotInput = document.getElementById('chatbot-input');
     const chatbotMessages = document.getElementById('chatbot-messages');
     
-    // Respostas pré-definidas
+    //respostas
     const responses = {
         "denúncia":  "\n Você pode denunciar:\n• Pelo 180 (Central da Mulher)\n• No app Salve Maria Recife\n• Em qualquer DEAM (Delegacia da Mulher) \n",
         "abrigo": "\n Abrigos na RMR:\n\n1. Casa da Mulher Pernambucana\nEndereço: Rua Real da Torre, 299\nTelefone: (81) 3184-3450\n\n2. Casa Abrigo Sigilosa\n(Contato via 180 ou polícia) \n",
@@ -205,20 +198,20 @@ document.addEventListener('DOMContentLoaded', function() {
         "default": "\n Digite:\n• 'denúncia'\n• 'abrigo'\n• 'medida'\n\nPara informações específicas\n"
     };
 
-    // Mostrar/ocultar chatbot
+    //mostrar/ocultar
     chatbotToggle.addEventListener('click', () => {
         chatbotContainer.style.display = chatbotContainer.style.display === 'flex' ? 'none' : 'flex';
         if (chatbotContainer.style.display === 'flex') {
-            addBotMessage("Olá! Sou a assistente do Salve Maria Recife. Como posso ajudar?");
+            addBotMessage("Olá! Sou a assistente do Salve Maria. Como posso ajudar?");
         }
     });
 
-    // Fechar chatbot
+    //fechar
     chatbotClose.addEventListener('click', () => {
         chatbotContainer.style.display = 'none';
     });
 
-    // Processar mensagens
+    //orocessar msg
     chatbotInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter' && chatbotInput.value.trim() !== '') {
             const userText = chatbotInput.value.toLowerCase();
@@ -237,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Funções auxiliares
+    //auxiliadores 100%
     function addUserMessage(text) {
         const msgDiv = document.createElement('div');
         msgDiv.className = 'user-message';

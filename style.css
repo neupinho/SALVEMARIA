@@ -1,0 +1,449 @@
+/* Reset e estilos globais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Cabeçalho */
+header {
+    background: linear-gradient(135deg, #8e44ad, #9b59b6);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.slogan {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+/* Navegação */
+nav {
+    background-color: #6c3483;
+    padding: 0.5rem;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    flex-wrap: wrap;
+}
+
+nav ul li {
+    margin: 0 1rem;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+/* Seção Hero */
+#hero {
+    background: url('img/mulheres.jpeg') no-repeat center center/cover;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    position: relative;
+}
+
+
+#hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    padding: 2rem;
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #c0392b;
+    transform: translateY(-2px);
+}
+
+/* Seções */
+.section-container {
+    padding: 3rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-container h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #6c3483;
+}
+
+/* Mapa */
+
+
+
+.map-container {
+    position: relative;
+    margin: 2rem auto;
+    max-width: 1000px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.map-container img {
+    width: 100%;
+    display: block;
+}
+
+.map-legend {
+    background-color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.legend-color.danger {
+    background-color: #e74c3c;
+}
+
+.legend-color.warning {
+    background-color: #f39c12;
+}
+
+.legend-color.safe {
+    background-color: #2ecc71;
+}
+
+/* Depoimentos */
+.testimonials {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.testimonial-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.testimonial-content {
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.testimonial-author {
+    font-weight: bold;
+    color: #6c3483;
+    text-align: right;
+}
+
+/* Seção de Emergência */
+.emergency-section {
+    background-color: #e74c3c;
+    color: white;
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.emergency-section h2 {
+    margin-bottom: 2rem;
+    color: white;
+}
+
+.emergency-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.emergency-btn {
+    background-color: white;
+    color: #e74c3c;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    width: 100%;
+}
+
+.secondary-btn {
+    background-color: transparent;
+    color: white;
+    border: 2px solid white;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.emergency-btn:hover, .secondary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Formulario do mapx */
+
+.leaflet-popup-content .form-group {
+    margin-bottom: 10px;
+}
+
+.leaflet-popup-content label {
+    display: block;
+    margin-bottom: 3px;
+    font-weight: bold;
+}
+
+.leaflet-popup-content select,
+.leaflet-popup-content textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.leaflet-popup-content textarea {
+    min-height: 60px;
+    resize: vertical;
+}
+
+.leaflet-popup-content button[type="submit"] {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* popup */
+
+.custom-popup {
+    max-width: 250px;
+}
+.custom-popup h4 {
+    margin: 0 0 5px 0;
+    color: #e74c3c;
+}
+.popup-content {
+    margin: 8px 0;
+    font-size: 14px;
+}
+.popup-footer {
+    font-size: 12px;
+    color: #666;
+    text-align: right;
+}
+
+/* conselhos */
+
+.dicas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.dica-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.dica-card h3 {
+    color: #8e44ad;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dica-card ul {
+    padding-left: 20px;
+}
+
+.dica-card li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.icon {
+    font-size: 1.5em;
+}
+
+/* chatbot */
+
+#chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 40px;
+    width: 400px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+#chatbot-header {
+    background: #8e44ad;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#chatbot-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#chatbot-messages {
+    height: 300px;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+#chatbot-input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 0 0 10px 10px;
+    border-top: none;
+}
+
+#chatbot-toggle {
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 30%;
+    width: 100px;
+    height: 100px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    z-index: 999;
+}
+
+/* Rodapé */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.footer-content p {
+    margin-bottom: 0.5rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-content p {
+        font-size: 1rem;
+    }
+    
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    nav ul li {
+        margin: 0.3rem 0;
+    }
+}

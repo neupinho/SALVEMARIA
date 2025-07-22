@@ -1,58 +1,60 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const interactiveMap = document.getElementById('interactive-map');
-    
-    if (interactiveMap) {
-        interactiveMap.addEventListener('click', function(e) {
-            const rect = this.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-         
+    document.getElementById('search-btn')?.addEventListener('click', () => {
+        const address = document.getElementById('address-input').value;
+        if (!address) return;
 
-            const marker = document.createElement('div');
-            marker.className = 'map-marker';
-            marker.style.left = (x - 10) + 'px';
-            marker.style.top = (y - 10) + 'px';
-            
-            
-            this.parentNode.appendChild(marker);
-            
-           
-            setTimeout(() => {
-                const reportType = prompt('Que tipo de risco você quer reportar?\n1. Assédio\n2. Roubo\n3. Área escura');
-                if (reportType) {
-                    alert('Obrigada por contribuir com a segurança de todas! Seu relato foi registrado.');
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    const { lat, lon } = data[0];
+                    map.setView([lat, lon], 16);
+                    
+                    L.marker([lat, lon], {
+                        icon: L.divIcon({
+                            className: 'temp-marker',
+                            html: '<div style="background: #3498db; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white;"></div>',
+                            iconSize: [24, 24]
+                        })
+                    }).addTo(map)
+                    .bindPopup(`<b>Local encontrado:</b><br>${address}`)
+                    .openPopup();
+                } else {
+                    alert("Endereço não encontrado!");
                 }
-            }, 100);
-        });
-    }
-    
+            })
+            .catch(() => alert("Erro ao buscar endereço. Tente novamente."));
+    });
+
 
     const emergencyBtn = document.getElementById('emergency-btn');
     if (emergencyBtn) {
         emergencyBtn.addEventListener('click', function() {
             if (confirm('Você está em perigo? Podemos alertar seus contatos de confiança.')) {
                 alert('Mensagem de emergência enviada para seus contatos com sua localização.');
+
             }
         });
     }
-    
 
     const policeBtn = document.getElementById('police-btn');
     if (policeBtn) {
         policeBtn.addEventListener('click', function() {
             if (confirm('Ligar para a Polícia Militar (190)?')) {
                 alert('Redirecionando para chamada de emergência...');
+                window.location.href = 'tel:190'; 
             }
         });
     }
-    
 
     const shelterBtn = document.getElementById('shelter-btn');
     if (shelterBtn) {
         shelterBtn.addEventListener('click', function() {
-            alert('Abrigos próximos:\n\n1. Casa Abrigo Recife - (81) 9999-9999\n2. Lar da Mulher Pernambucana - (81) 8888-8888');
+            window.location.href = 'abrigos.html';
         });
-    }
+    } 
+    
+
     
     const style = document.createElement('style');
     style.textContent = `
@@ -73,37 +75,57 @@ document.addEventListener('DOMContentLoaded', function() {
             50% { transform: scale(1.2); }
             100% { transform: scale(1); }
         }
+        
+        .custom-marker {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .temp-marker {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     `;
     document.head.appendChild(style);
 
-
- 
     const map = L.map('mapid').setView([-8.0476, -34.8770], 13);
-
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
+    L.marker([-8.0640917, -34.8804661], {
+        icon: L.divIcon({
+            className: 'custom-marker',
+            html: '<div style="background: #e74c3c; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white;"></div>',
+            iconSize: [24, 24]
+        })
+    }).addTo(map)
+    .bindPopup("<b>Praça do Diário</b><br>Área com alto índice de assédio após as 18h")
+    .openPopup();
 
-    L.marker([-8.0640917, -34.8804661,1691])
-        .addTo(map)
-        .bindPopup("<b>Praça do Diário</b><br>Área com alto índice de assédio após as 18h")
-        .openPopup();
-
-    
-    
     map.on('click', function(e) {
-   
         const form = document.createElement('form');
         form.innerHTML = `
             <h3>Reportar Perigo</h3>
             <div class="form-group">
-                <label>Tipo:</label>
-                <select class="danger-type">
+                <label>Tipo de Ocorrência:</label>
+                <select class="occurrence-type">
                     <option value="Assédio">Assédio</option>
                     <option value="Roubo">Roubo</option>
                     <option value="Iluminação">Iluminação</option>
+                    <option value="Abrigo">Abrigo</option>
+                    <option value="Outro">Outro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Nível de Risco:</label>
+                <select class="danger-level">
+                    <option value="alto-risco">Alto Risco</option>
+                    <option value="cuidado">Cuidado</option>
+                    <option value="seguro">Seguro</option>
                 </select>
             </div>
             <div class="form-group">
@@ -118,100 +140,79 @@ document.addEventListener('DOMContentLoaded', function() {
             .setContent(form)
             .openOn(map);
         
-        
         form.addEventListener('submit', function(event) {
             event.preventDefault();
-            const tipo = form.querySelector('.danger-type').value;
-            const descricao = form.querySelector('.danger-description').value;
-            
-            L.marker([e.latlng.lat, e.latlng.lng])
-                .addTo(map)
-                .bindPopup(`
-                    <div class="custom-popup">
-                        <h4>${tipo}</h4>
-                        <div class="popup-content">${descricao || 'Sem descrição adicional'}</div>
-                        <div class="popup-footer">${new Date().toLocaleString()}</div>
-                    </div>
-                `);
-            
+            const occurrenceType = form.querySelector('.occurrence-type').value;
+            const dangerLevel = form.querySelector('.danger-level').value;
+            const description = form.querySelector('.danger-description').value;
+
+            const colors = {
+                'alto-risco': '#e74c3c',
+                'cuidado': '#f39c12',
+                'seguro': '#2ecc71'
+            };
+
+            const marker = L.marker([e.latlng.lat, e.latlng.lng], {
+                icon: L.divIcon({
+                    className: 'custom-marker',
+                    html: `<div style="background: ${colors[dangerLevel]}; 
+                           width: 24px; 
+                           height: 24px; 
+                           border-radius: 50%; 
+                           border: 3px solid white;
+                           box-shadow: 0 0 10px rgba(0,0,0,0.3);"></div>`,
+                    iconSize: [24, 24]
+                })
+            }).addTo(map)
+            .bindPopup(`
+                <div class="custom-popup">
+                    <h4 style="color: ${colors[dangerLevel]}">${occurrenceType.toUpperCase()}</h4>
+                    <p><strong>Nível:</strong> ${dangerLevel.replace('-', ' ')}</p>
+                    <div class="popup-content">${description || 'Sem descrição adicional'}</div>
+                    <div class="popup-footer">${new Date().toLocaleString()}</div>
+                </div>
+            `);
+
             map.closePopup();
+            saveReport(e.latlng.lat, e.latlng.lng, occurrenceType, dangerLevel, description);
         });
     });
 
-    function saveReport(lat, lng, tipo) {
-        const marker = L.marker([lat, lng])
-            .addTo(map)
-            .bindPopup(`<b>${tipo}</b><br>Reportado em ${new Date().toLocaleTimeString()}`);
+    function saveReport(lat, lng, occurrenceType, dangerLevel, description) {
+        console.log(`Marcador criado em ${lat}, ${lng} - Tipo: ${occurrenceType}, Nível: ${dangerLevel}, Descrição: ${description}`);
         
-        
-        console.log(`Marcador criado em ${lat}, ${lng} - Tipo: ${tipo}`);
     }
 
-    
+
 });
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    
     const chatbotToggle = document.getElementById('chatbot-toggle');
     const chatbotContainer = document.getElementById('chatbot-container');
     const chatbotClose = document.getElementById('chatbot-close');
     const chatbotInput = document.getElementById('chatbot-input');
     const chatbotMessages = document.getElementById('chatbot-messages');
     
-  
     const responses = {
-        "denúncia":  "\n Você pode denunciar:\n• Pelo 180 (Central da Mulher)\n• No app Salve Maria Recife\n• Em qualquer DEAM (Delegacia da Mulher) \n",
-        "abrigo": "\n Abrigos na RMR:\n\n1. Casa da Mulher Pernambucana\nEndereço: Rua Real da Torre, 299\nTelefone: (81) 3184-3450\n\n2. Casa Abrigo Sigilosa\n(Contato via 180 ou polícia) \n",
-        "medida": `
-        MEDIDAS PROTETIVAS - INFORMAÇÕES ESSENCIAIS
-
-        O que são:
-        Ordens judiciais que determinam:
-        - Afastamento do agressor (no mínimo 200 metros)
-        - Proibição de contato por qualquer meio
-        - Suspensão da posse de armas
-
-        Como obter:
-        1. Registre um Boletim de Ocorrência em qualquer delegacia
-        2. Solicite expressamente a medida protetiva
-        3. Apresente documentos e evidências:
-           * RG e CPF
-           * Relatos detalhados dos fatos
-           * Provas como mensagens ou fotos
-
-        Prazos:
-        - Concessão em até 48 horas
-        - Validade inicial de 6 meses (prorrogável)
-
-        O que fazer se descumprida:
-        1. Ligue imediatamente para a Polícia Militar (190)
-        2. Registre novo BO relatando o descumprimento
-        3. Procure a Defensoria Pública se precisar de assistência jurídica
-
-        Contatos úteis em Recife:
-        - DEAM Central: (81) 3182-7600
-        - Defensoria Pública: (81) 3182-8400
-        - Plantão Judiciário: (81) 3182-8500
-    `,
-        "default": "\n Digite:\n• 'denúncia'\n• 'abrigo'\n• 'medida'\n\nPara informações específicas\n"
+        "denúncia": "Você pode denunciar de três formas:<br>1. <strong>Ligue 180</strong> (Central da Mulher)<br>2. <strong>Registre um BO online</strong> no site da Polícia Civil<br>3. <strong>Procure uma DEAM</strong> (Delegacia da Mulher)",
+        "abrigo": "Abrigos disponíveis:<br><br>1. <strong>Casa Abrigo Sigilosa</strong><br>- Contato via 180 ou 190<br><br>2. <strong>Casa da Mulher Pernambucana</strong><br>- Endereço: Rua Real da Torre, 299<br>- Telefone: (81) 3184-3450",
+        "medida protetiva": "Para conseguir uma <strong>medida protetiva</strong>:<br>1. Registre um BO em qualquer delegacia<br>2. Solicite a medida ao delegado<br>3. Leve documentos (RG, comprovante de residência)<br><br><em>Em caso de descumprimento, ligue 190 imediatamente!</em>",
+        "default": "Digite:<br><strong>'denúncia'</strong> - Para como denunciar<br><strong>'abrigo'</strong> - Lista de abrigos seguros<br><strong>'medida protetiva'</strong> - Informações sobre medidas protetivas"
     };
 
-
-    chatbotToggle.addEventListener('click', () => {
+    chatbotToggle?.addEventListener('click', () => {
         chatbotContainer.style.display = chatbotContainer.style.display === 'flex' ? 'none' : 'flex';
         if (chatbotContainer.style.display === 'flex') {
-            addBotMessage("Olá! Sou a assistente do Salve Maria. Como posso ajudar?");
+            addBotMessage("Olá! Sou a assistente do Salve Maria. Como posso ajudar? Digite as palavras chaves 'abrigo', 'medida protetiva' e 'denúncia'");
         }
     });
 
-    
-    chatbotClose.addEventListener('click', () => {
+    chatbotClose?.addEventListener('click', () => {
         chatbotContainer.style.display = 'none';
     });
 
-
-    chatbotInput.addEventListener('keypress', (e) => {
+    chatbotInput?.addEventListener('keypress', (e) => {
         if (e.key === 'Enter' && chatbotInput.value.trim() !== '') {
             const userText = chatbotInput.value.toLowerCase();
             addUserMessage(userText);
@@ -219,17 +220,15 @@ document.addEventListener('DOMContentLoaded', function() {
             
             setTimeout(() => {
                 let reply = responses.default;
-                if (userText.includes('denúncia')) reply = responses["denúncia"];
-                if (userText.includes('denuncia')) reply = responses["denúncia"];
+                if (userText.includes('denúncia') || userText.includes('denuncia')) reply = responses["denúncia"];
                 if (userText.includes('abrigo')) reply = responses["abrigo"];
-                if (userText.includes('medida')) reply = responses["medida"];
+                if (userText.includes('medida')) reply = responses["medida protetiva"];
                 
                 addBotMessage(reply);
             }, 500);
         }
     });
 
-    
     function addUserMessage(text) {
         const msgDiv = document.createElement('div');
         msgDiv.className = 'user-message';

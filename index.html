@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#e74c3c">
     <title>Salve Maria Recife - Rede de Apoio e Segurança para Mulheres</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
@@ -24,7 +25,7 @@
             <li><a href="#mapa">Mapa Seguro</a></li>
             <li><a href="#depoimentos">Depoimentos</a></li>
             <li><a href="#emergencia">Ajuda Emergencial</a></li>
-            <li><a href="#sobre">Sobre Nós</a></li>
+            <li><a href="informacoes.html">Informações</a></li>
         </ul>
     </nav>
 
@@ -41,6 +42,10 @@
 
         <section id="mapa" class="section-container">
             <h2>Mapa Colaborativo</h2>
+            <div class="address-search">
+                <input type="text" id="address-input" placeholder="Digite um endereço: ">
+                <button id="search-btn">Buscar</button>
+                </div>
             <div id="mapid" style="height: 500px; border-radius: 8px; border: 1px solid #ddd;"></div>
             <div class="map-legend">
                  <div class="legend-item"><span class="legend-color danger"></span> Alto Risco</div>
@@ -128,7 +133,7 @@
     <div id="chatbot-container">
         <div id="chatbot-header">
             <span>Assistente Virtual</span>
-            <button id="chatbot-close">×</button>
+            <button id="chatbot-close">X</button>
         </div>
         <div id="chatbot-messages"></div>
         <input type="text" id="chatbot-input" placeholder="Digite sua dúvida...">

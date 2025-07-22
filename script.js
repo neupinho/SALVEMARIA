@@ -96,15 +96,36 @@ document.addEventListener('DOMContentLoaded', function() {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
-    L.marker([-8.0640917, -34.8804661], {
-        icon: L.divIcon({
-            className: 'custom-marker',
-            html: '<div style="background: #e74c3c; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white;"></div>',
-            iconSize: [24, 24]
-        })
+
+    L.marker([-8.0489691,-34.942389], {
+    icon: L.divIcon({
+        className: 'custom-marker',
+        html: '<div style="background: #2ecc71; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white;"></div>',
+        iconSize: [24, 24]
+    })
     }).addTo(map)
-    .bindPopup("<b>Praça do Diário</b><br>Área com alto índice de assédio após as 18h")
-    .openPopup();
+    .bindPopup("<b>Abrigo casa de isabel</b><br>Atende meninas e mulheres em situação de vulnerabilidade")
+
+    
+    L.marker([-8.063549,-34.8904319], {
+    icon: L.divIcon({
+        className: 'custom-marker',
+        html: '<div style="background: #2ecc71; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white;"></div>',
+        iconSize: [24, 24]
+    })
+    }).addTo(map)
+    .bindPopup("<b>Abrigo casa menina mulher</b><br>Atende meninas e mulheres em situação de vulnerabilidade")
+   
+
+    L.marker([-8.0924377,-34.9321112], {
+    icon: L.divIcon({
+        className: 'custom-marker',
+        html: '<div style="background: #2ecc71; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white;"></div>',
+        iconSize: [24, 24]
+    })
+    }).addTo(map)
+    .bindPopup("<b>SER- Centro de Referência Clarice Lispector</b><br>Atende meninas e mulheres em situação de vulnerabilidade")
+
 
     map.on('click', function(e) {
         const form = document.createElement('form');
@@ -125,7 +146,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 <select class="danger-level">
                     <option value="alto-risco">Alto Risco</option>
                     <option value="cuidado">Cuidado</option>
-                    <option value="seguro">Seguro</option>
                 </select>
             </div>
             <div class="form-group">

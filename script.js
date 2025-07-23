@@ -10,15 +10,79 @@ document.addEventListener('DOMContentLoaded', function() {
                     const { lat, lon } = data[0];
                     map.setView([lat, lon], 16);
                     
-                    L.marker([lat, lon], {
-                        icon: L.divIcon({
-                            className: 'temp-marker',
-                            html: '<div style="background: #3498db; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white;"></div>',
-                            iconSize: [24, 24]
-                        })
-                    }).addTo(map)
-                    .bindPopup(`<b>Local encontrado:</b><br>${address}`)
-                    .openPopup();
+                    map.closePopup();
+
+                    const form = document.createElement('form');
+                    form.innerHTML = `
+                        <h3>Reportar Perigo em:</h3>
+                        <p><strong>${address}</strong></p>
+                        <div class="form-group">
+                            <label>Tipo de Ocorrência:</label>
+                            <select class="occurrence-type">
+                                <option value="Assédio">Assédio</option>
+                                <option value="Roubo">Roubo</option>
+                                <option value="Iluminação">Iluminação</option>
+                                <option value="Abrigo">Abrigo</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Nível de Risco:</label>
+                            <select class="danger-level">
+                                <option value="alto-risco">Alto Risco</option>
+                                <option value="cuidado">Cuidado</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Descrição:</label>
+                            <textarea class="danger-description" placeholder="Ex: Homem de camisa vermelha assediando mulheres"></textarea>
+                        </div>
+                        <button type="submit">Enviar</button>
+                    `;
+                    
+                    const popup = L.popup()
+                        .setLatLng([lat, lon])
+                        .setContent(form)
+                        .openOn(map);
+
+                    form.addEventListener('submit', function(event) {
+                        event.preventDefault();
+                        const occurrenceType = form.querySelector('.occurrence-type').value;
+                        const dangerLevel = form.querySelector('.danger-level').value;
+                        const description = form.querySelector('.danger-description').value;
+
+                        const colors = {
+                            'alto-risco': '#e74c3c',
+                            'cuidado': '#f39c12',
+                            'seguro': '#2ecc71'
+                        };
+
+                        const marker = L.marker([lat, lon], {
+                            icon: L.divIcon({
+                                className: 'custom-marker',
+                                html: `<div style="background: ${colors[dangerLevel]}; 
+                                       width: 24px; 
+                                       height: 24px; 
+                                       border-radius: 50%; 
+                                       border: 3px solid white;
+                                       box-shadow: 0 0 10px rgba(0,0,0,0.3);"></div>`,
+                                iconSize: [24, 24]
+                            })
+                        }).addTo(map)
+                        .bindPopup(`
+                            <div class="custom-popup">
+                                <h4 style="color: ${colors[dangerLevel]}">${occurrenceType.toUpperCase()}</h4>
+                                <p><strong>Local:</strong> ${address}</p>
+                                <p><strong>Nível:</strong> ${dangerLevel.replace('-', ' ')}</p>
+                                <div class="popup-content">${description || 'Sem descrição adicional'}</div>
+                                <div class="popup-footer">${new Date().toLocaleString()}</div>
+                            </div>
+                        `);
+
+                        map.closePopup();
+                        saveReport(lat, lon, occurrenceType, dangerLevel, description);
+                    });
+
                 } else {
                     alert("Endereço não encontrado!");
                 }
@@ -95,6 +159,16 @@ document.addEventListener('DOMContentLoaded', function() {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
+
+    L.popup()
+    .setLatLng(map.getCenter())
+    .setContent(`<div style="text-align:center;">
+        <h3>Como usar o mapa:</h3>
+        <p><strong>Clique em qualquer lugar</strong> para marcar um local perigoso</p>
+        <p><strong></strong>Use a busca em cima do mapa para encontrar endereços</p>
+    </div>`)
+    .openOn(map);
+    setTimeout(() => map.closePopup(), 16000);
 
 
     L.marker([-8.0489691,-34.942389], {
